@@ -14,7 +14,7 @@ namespace Project_To_Do_List.Controllers
         DbConnect db = new DbConnect();
         string strConnection = "Server = NGUYENDUNG\\SQLEXPRESS;Database = TodoList; UID = sa; Password = 123; Trust Server Certificate = true";
 
-        int check = 0;
+        int check = 0; 
       
 
         public IActionResult Index()
