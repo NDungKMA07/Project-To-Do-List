@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ToDoList</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="card__header">
+            <img src="/img/X2oObC4.png" />
+        </div>
+        <!-- <h2>hello!</h2> -->
+        <div class="card__body">
+           
+            <div class="card__content">
+                <div class="card__title">
+                    <h2>Creat Task</h2>
+                    @{
+                        DateTime aDate = DateTime.Now;
+                        aDate.ToString("MM/dd/yyyy");
+                    }
+                    <p>@aDate</p>
+
+                </div>
+                <div class="card__add card__add-PageCreat">
+                    <form action="/Todo/Creat" method="post">
+                        <input id="newTask" type="text" placeholder="Enter an activity..." name="inputTask">
+                        <button id="addItem">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    </form>
+
+                      
+                     
+                </div>
+                
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+   
+
+
+
+</body>
+
+</html>

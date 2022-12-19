@@ -1,0 +1,51 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<ul class="todo" id="todo">
+    @for (var i = 1; i < ViewBag.resultOff.Count; i++)
+    {
+        <li> 
+            <span>@i</span>
+            <span>@ViewBag.resultOff[i].textToDo</span>
+          
+           <div class="buttons">
+                    <a href="/Todo/Delete/@ViewBag.resultOff[i].STT" class="remove" onclick="return window.confirm('Are you sure?');">
+                    <i class="fa fa-trash-alt"></i>
+                </a>
+                <a href="/Todo/OnState/@ViewBag.resultOff[i].STT"  class="complete">
+                    <i class="far fa-check-circle"></i>
+                </a>
+
+            </div>
+        </li>
+
+    }
+</ul>
+
+
+
+<ul class="todo" id="completed">
+
+    @for (var i = 1; i < ViewBag.StateOn.Count; i++)
+    {
+        <li> <span>@i</span>
+            <span>@ViewBag.StateOn[i].textToDo</span>
+           
+            <div class="buttons">
+                    <a href="/Todo/Delete/@ViewBag.StateOn[i].STT" class="remove" onclick="return window.confirm('Are you sure?');">
+                    <i class="fa fa-trash-alt"></i>
+                 </a>
+
+                <a href="/Todo/OffState/@ViewBag.StateOn[i].STT" class="complete">
+                    <i class="far fa-check-circle"></i>
+                    <i class="fas fa-check-circle"></i>
+                </a>
+
+            </div>
+        </li>
+    }
+</ul>
