@@ -14,34 +14,38 @@ namespace Project_To_Do_List.Controllers
         DbConnect db = new DbConnect();
         string strConnection = "Server = NGUYENDUNG\\SQLEXPRESS;Database = TodoList; UID = sa; Password = 123; Trust Server Certificate = true";
 
-
+        int check = 0;
+      
 
         public IActionResult Index()
         {
-            if (TempData["Asc"] != null)
-            {
-                var resultOn = db.ToDoList.Where(item => item.status == 1).OrderBy(item => item.textToDo).ToList();
-                var resultOff = db.ToDoList.Where(item => item.status == 0).OrderBy(item => item.textToDo).ToList();
-                ViewBag.StateOn = resultOn;
-                ViewBag.resultOff = resultOff;
+            var resultOn = db.ToDoList.Where(item => item.status == 1).ToList();
+            var resultOff = db.ToDoList.Where(item => item.status == 0).ToList();
+            
+            switch (this.check) {
+                case 1:
+                    {
+                        resultOn = db.ToDoList.Where(item => item.status == 1).OrderBy(item => item.textToDo).ToList();
+                        resultOff = db.ToDoList.Where(item => item.status == 0).OrderBy(item => item.textToDo).ToList();
+                        break;
+                    }
+                case 2:
+                    {
+                        resultOn = db.ToDoList.Where(item => item.status == 1).OrderByDescending(item => item.textToDo).ToList();
+                        resultOff = db.ToDoList.Where(item => item.status == 0).OrderByDescending(item => item.textToDo).ToList();
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
             }
-            else if (TempData["Dsc"] != null)
-            {
-                var resultOn = db.ToDoList.Where(item => item.status == 1).OrderByDescending(item => item.textToDo).ToList();
-                var resultOff = db.ToDoList.Where(item => item.status == 0).OrderByDescending(item => item.textToDo).ToList();
-                ViewBag.StateOn = resultOn;
-                ViewBag.resultOff = resultOff;
-            }
-            else
-            {   
-                var resultOn = db.ToDoList.Where(item => item.status == 1).ToList();
-                var resultOff = db.ToDoList.Where(item => item.status == 0).ToList();
-                ViewBag.StateOn = resultOn;
-                ViewBag.resultOff = resultOff;
-            }
-
-
+            ViewBag.StateOn = resultOn;
+            ViewBag.resultOff = resultOff;
+            ViewBag.checka = this.check;
             return View("Index");
+            
+            
         }
 
         public IActionResult OnState(int? id)
@@ -115,12 +119,13 @@ namespace Project_To_Do_List.Controllers
         }
 
         public IActionResult sortASC() {
-            TempData["Asc"] = 1;
+         
+            this.check = 1;
             return RedirectToAction("Index");
         }
         public IActionResult sortDSC()
         {
-            TempData["Dsc"] = 0;
+            this.check = 2;
             return RedirectToAction("Index");
         }
 
