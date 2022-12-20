@@ -14,35 +14,28 @@ namespace Project_To_Do_List.Controllers
         DbConnect db = new DbConnect();
         string strConnection = "Server = NGUYENDUNG\\SQLEXPRESS;Database = TodoList; UID = sa; Password = 123; Trust Server Certificate = true";
 
-        int check = 0; 
+        
       
 
         public IActionResult Index()
         {
             var resultOn = db.ToDoList.Where(item => item.status == 1).ToList();
             var resultOff = db.ToDoList.Where(item => item.status == 0).ToList();
-            
-            switch (this.check) {
-                case 1:
-                    {
-                        resultOn = db.ToDoList.Where(item => item.status == 1).OrderBy(item => item.textToDo).ToList();
-                        resultOff = db.ToDoList.Where(item => item.status == 0).OrderBy(item => item.textToDo).ToList();
-                        break;
-                    }
-                case 2:
-                    {
-                        resultOn = db.ToDoList.Where(item => item.status == 1).OrderByDescending(item => item.textToDo).ToList();
-                        resultOff = db.ToDoList.Where(item => item.status == 0).OrderByDescending(item => item.textToDo).ToList();
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
+            if (TempData["checkASC"] != null)
+            {
+                resultOn = db.ToDoList.Where(item => item.status == 1).OrderBy(item => item.textToDo).ToList();
+                resultOff = db.ToDoList.Where(item => item.status == 0).OrderBy(item => item.textToDo).ToList();
+
+            }
+            if (TempData["checkDSC"] != null)
+            {
+                resultOn = db.ToDoList.Where(item => item.status == 1).OrderByDescending(item => item.textToDo).ToList();
+                resultOff = db.ToDoList.Where(item => item.status == 0).OrderByDescending(item => item.textToDo).ToList();
+
             }
             ViewBag.StateOn = resultOn;
             ViewBag.resultOff = resultOff;
-            ViewBag.checka = this.check;
+           
             return View("Index");
             
             
@@ -119,13 +112,13 @@ namespace Project_To_Do_List.Controllers
         }
 
         public IActionResult sortASC() {
-         
-            this.check = 1;
+
+            TempData["checkASC"] = 1;
             return RedirectToAction("Index");
         }
         public IActionResult sortDSC()
         {
-            this.check = 2;
+            TempData["checkDSC"] = 2;
             return RedirectToAction("Index");
         }
 
