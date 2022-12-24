@@ -16,6 +16,12 @@ app.UseSession();
 //khai báo để project hiểu được và có thể load các file trong thư mục wwwroot
 app.UseStaticFiles();
 //cấu hình đường dẫn
+
+//Khi tạo phân hệ area phải cấu hình để webstie biết được mvc trong mô hình đó 
+// Phải cấu hình trên phan hệ mặc định
+
+app.MapControllerRoute(name: "areas", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 //---
 app.Run();

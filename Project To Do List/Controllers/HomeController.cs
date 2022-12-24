@@ -7,7 +7,7 @@ namespace Project_To_Do_List.Controllers
     {
         public IActionResult Index()
         {
-            return Redirect("/Todo/Index");
+            return Redirect("Admin/Account/Login");
         }
     }
 }

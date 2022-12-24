@@ -2,13 +2,14 @@
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Project_To_Do_List.Models
 {
-    [Table("TableToDo")]
+    [Table("Content")]
     public class ItemToDo
     {
         [Key]
-        public int STT { get; set; }
-        public string textToDo { get; set; }
-        public int status { get; set; }
+        public int ID { get; set; }
+        public int IdUser { get; set; }
+        public string Text { get; set; }
+        public Boolean Status { get; set; }
 
  
     }

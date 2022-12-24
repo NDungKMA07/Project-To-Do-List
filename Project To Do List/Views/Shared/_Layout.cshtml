@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,7 +9,7 @@
     <title>ToDoList</title>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -22,10 +23,10 @@
         <!-- <h2>hello!</h2> -->
         <div class="card__body">
             <div class="filter-btn">
-                <a id="one" href="#"><i class="fa fa-check-circle"></i></a>
+                <a id="one" href="/Admin/User/Index"><i class="fa-solid fa-user"></i></a>
                 <a id="two" href="/Todo/sortASC" ><i class="fa fa-sort-alpha-down"></i></a>
                 <a id="three" href="/Todo/sortDSC" ><i class="fa fa-sort-alpha-up"></i></a>
-                <a id="all" href="#"><i class="fa fa-clock"></i></a>
+                <a id="all" href="/Admin/Account/Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
                 <span class="toggle-btn">
                     <i class="fa fa-filter"></i>
                     <i class="fa fa-times"></i>
@@ -33,7 +34,8 @@
             </div>
             <div class="card__content">
                 <div class="card__title">
-                    <h2>My Tasks</h2>
+                   
+                    <h2>@ViewBag.UserName </h2>
                     @{
                         DateTime aDate = DateTime.Now;
                         aDate.ToString("MM/dd/yyyy");
