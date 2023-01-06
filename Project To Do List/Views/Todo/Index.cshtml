@@ -27,6 +27,7 @@
     }
 </ul>
 
+@Html.PagedListPager((IPagedList)ViewBag.resultOff,p=>Url.Action("Index", new {page = p}))
 
 
 
@@ -55,6 +56,52 @@
         </li>
     }
 </ul>
-@{
-    //@Html.PagedListPager((IPagedList)ViewBag.recordPage, page => Url.Action("Index", new { page = page }))
+<style>
+
+.pagination {
+    display: flex;
+    list-style-type: none;
+    margin: 10px 0;
 }
+
+    .pagination li {
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        line-height: 25px;
+        margin: 0 3px;
+        
+        border-radius: 3px;
+        border: 1px solid rgba(222, 57, 99, 0.6);
+        color: #fff;
+        transition: all 0.3s linear;
+        font-size: 15px;
+    }
+    .pagination li a{
+        text-decoration:none;
+    }
+
+        .pagination li:hover {
+            background-color: rgba(222, 57, 99, 0.6);
+            
+        }
+        .pagination li:hover a{
+            color: #fff;
+            font-weight: bold;
+            text-decoration:none;
+        }
+
+    .pagination .active {
+        background-color: rgba(222, 57, 99, 0.6);
+       
+    }
+    .pagination .active span{
+         color: #fff;
+        font-weight: bold;
+  
+    }
+
+
+</style>
+
+@Html.PagedListPager((IPagedList)ViewBag.StateOn,p=>Url.Action("Index", new {page = p}))

@@ -7,23 +7,27 @@ using Microsoft.Data.SqlClient;
 using Newtonsoft;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Project_To_Do_List.Areas.Admin.Attributes;
+using BC = BCrypt.Net.BCrypt;
+using System.Security.Cryptography;
 
 namespace Project_To_Do_List.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [CheckLogin]
     public class UserController : Controller
     {
         DbConnect db = new DbConnect();
-        string strConnection = "Server = NGUYENDUNG\\SQLEXPRESS;Database = ToDoListNew; UID = sa; Password = 123; Trust Server Certificate = true";
-
+      
+        
         public IActionResult Index()
         {
-            string _StrCountTaskOn = HttpContext.Session.GetString("countTaskOn");
-            string _StrCountTaskOff = HttpContext.Session.GetString("countTaskOff");
-            int TotalTask = Int32.Parse(_StrCountTaskOn) + Int32.Parse(_StrCountTaskOff);
-
             string StrUserRecord = HttpContext.Session.GetString("User");
             UserRecord item = JsonConvert.DeserializeObject<UserRecord>(StrUserRecord);
+            int _idUser = item.ID;
+            int _StrCountTaskOn = db.ToDoList.Where(anhxa => anhxa.IdUser == _idUser && anhxa.Status).ToList().Count();
+            int _StrCountTaskOff = db.ToDoList.Where(anhxa => anhxa.Status == false && anhxa.IdUser == _idUser).ToList().Count();
+            int TotalTask = _StrCountTaskOn + _StrCountTaskOff;
 
             ViewBag.UserInfo = item;
             ViewBag.TotalTask  = TotalTask;
@@ -42,7 +46,18 @@ namespace Project_To_Do_List.Areas.Admin.Controllers
             string _name = fc["name_Creat_Account"].ToString().Trim();
             string _email = fc["email_Creat_Account"].ToString().Trim();
             string _password = fc["password_Creat_Account"].ToString().Trim();
+            _password = BC.HashPassword(_password);
 
+            
+            UserRecord user = new UserRecord();
+            user.Name = _name;
+            user.Email = _email;
+            user.Password = _password;  
+            db.UserRecords.Add(user);   
+            db.SaveChanges();
+            
+            // su dung cmd cua sql
+            /*
             using (SqlConnection conn = new SqlConnection(strConnection))
             {
                 SqlCommand cmd = new SqlCommand("insert into Users(Name,Email, Password ) values (@paramName, @paramEmail, @paramPassword)", conn);
@@ -52,6 +67,7 @@ namespace Project_To_Do_List.Areas.Admin.Controllers
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
+            */
 
 
             return Redirect("/Admin/Account/Login");
@@ -66,20 +82,14 @@ namespace Project_To_Do_List.Areas.Admin.Controllers
 
         public IActionResult UpdateNamePost(IFormCollection fc)
         {
-            string _name = fc["input_update_name"];
+            string _name = fc["input_update_name"].ToString().Trim();
             string StrUserRecord = HttpContext.Session.GetString("User");
             UserRecord item = JsonConvert.DeserializeObject<UserRecord>(StrUserRecord);
             int _idUser = item.ID;
-            if (!string.IsNullOrEmpty(_name))
+            UserRecord record = db.UserRecords.Where(item => item.ID == _idUser).FirstOrDefault();
+            if(record != null)
             {
-                using (SqlConnection conn = new SqlConnection(strConnection))
-                {
-                    SqlCommand cmd = new SqlCommand("update Users set Name = @paramName where ID = @IdUser", conn);
-                    cmd.Parameters.AddWithValue("@paramName", _name);
-                    cmd.Parameters.AddWithValue("@IdUser", _idUser);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                record.Name = _name;    
             }
             else
             {
@@ -101,16 +111,10 @@ namespace Project_To_Do_List.Areas.Admin.Controllers
             string StrUserRecord = HttpContext.Session.GetString("User");
             UserRecord item = JsonConvert.DeserializeObject<UserRecord>(StrUserRecord);
             int _idUser = item.ID;
-            if (!string.IsNullOrEmpty(_email))
+            UserRecord record = db.UserRecords.Where(item => item.ID == _idUser).FirstOrDefault();
+            if (record != null)
             {
-                using (SqlConnection conn = new SqlConnection(strConnection))
-                {
-                    SqlCommand cmd = new SqlCommand("update Users set Email = @paramEmail where ID = @IdUser ", conn);
-                    cmd.Parameters.AddWithValue("@paramEmail", _email);
-                    cmd.Parameters.AddWithValue("@IdUser", _idUser);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                record.Email = _email;
             }
             else
             {
@@ -129,19 +133,14 @@ namespace Project_To_Do_List.Areas.Admin.Controllers
         public IActionResult UpdatePasswordPost(IFormCollection fc)
         {
             string _password = fc["input_update_pass"];
+            _password = BC.HashPassword(_password);
             string StrUserRecord = HttpContext.Session.GetString("User");
             UserRecord item = JsonConvert.DeserializeObject<UserRecord>(StrUserRecord);
             int _idUser = item.ID;
-            if (!string.IsNullOrEmpty(_password))
+            UserRecord record = db.UserRecords.Where(item => item.ID == _idUser).FirstOrDefault();
+            if (record != null)
             {
-                using (SqlConnection conn = new SqlConnection(strConnection))
-                {
-                    SqlCommand cmd = new SqlCommand("update Users set Password = @paramPassword where ID = @IdUser ", conn);
-                    cmd.Parameters.AddWithValue("@paramPassword", _password);
-                    cmd.Parameters.AddWithValue("@IdUser", _idUser);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                record.Password = _password;
             }
             else
             {

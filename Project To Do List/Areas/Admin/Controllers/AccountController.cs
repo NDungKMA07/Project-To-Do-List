@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project_To_Do_List.Models;
+using BC = BCrypt.Net.BCrypt;
 
+using Microsoft.AspNetCore.Mvc.Filters;
+using Project_To_Do_List.Areas.Admin.Attributes;
 
 namespace Project_To_Do_List.Areas.Admin.Controllers
 {
+
     [Area("Admin")]
+    
     public class AccountController : Controller
     {
         DbConnect db = new DbConnect();
@@ -28,26 +33,24 @@ namespace Project_To_Do_List.Areas.Admin.Controllers
 
             if (record != null)
             {
-
-                if (record.Password == _password)
+                if(BC.Verify(_password,record.Password) == true)
                 {
-
                     string UserJson = JsonConvert.SerializeObject(record);
                     HttpContext.Session.SetString("User", UserJson);
+                    HttpContext.Session.SetString("Email_login", _email);
                     return Redirect("/Todo/Index");
                 }
-            }
-            else
-            {
-                return RedirectToAction("Login");
+
+               
             }
 
-            return RedirectToAction("Login");
+
+            return Redirect("/Admin/Account/Login?notify=invalid");
         }
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("User");
+            HttpContext.Session.Remove("Email_login");
             return Redirect("Login");
         }
     }
